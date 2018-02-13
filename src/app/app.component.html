@@ -8,8 +8,9 @@
 <button (click)="ngOnDestroy()">Go Offline</button>
 <input type="text" (keyup.enter)="addCourse(course)" #course>
 <ul>
+ 
   <li *ngFor="let p of courses$ | async"> 
- {{ p.nome }}
+ {{ p.nome }} 
   </li>
 </ul>
 <p>
@@ -24,4 +25,9 @@ Author Name: {{ ( author$ | async | json) }} <br>
   <li>{{ author.isPremium }}</li>
 </ul>
 
-
+<ul>
+<li *ngFor="let c of courseComId "> 
+    {{ c.nome | async | json }} 
+     </li>
+    </ul>
+  buceta  {{courseComId[0].nome | async | json}}

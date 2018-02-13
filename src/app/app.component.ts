@@ -1,7 +1,7 @@
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import { AngularFireDatabase, AngularFireList, AngularFireObject } from 'angularfire2/database';
 import { Subscription } from 'rxjs/Subscription';
 
 
@@ -11,28 +11,27 @@ import { Subscription } from 'rxjs/Subscription';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+ private basePath = '/courses';
  courses$;
- course$;
+ course$: AngularFireObject<any>;
  author$;
+ crud: AngularFireList<any>;
+courseComId: any;
 
-
-  constructor(private db: AngularFireDatabase) {}
+  constructor(private db: AngularFireDatabase) {
+    this.crud  = this.db.list(this.basePath);
+  }
 
   getCourses() {
-    this.courses$ = this.db.list('/courses').valueChanges();
-    this.course$ = this.db.object('/courses/5').valueChanges();
+    this.courses$ = this.db.list(this.basePath).valueChanges();
+    //this.course$ = this.db.object('/courses/5').valueChanges();
     this.author$ = this.db.object('/authors/1').valueChanges();
 
-    //#region get sem utilizar o pipe | async
-    /*
-   this.subscription =  this.db.list('/courses').valueChanges()
-   .subscribe(result => {
-     this.courses = result;
-     console.log('Firebase Result: ', this.courses);
-   });
-   */
-  //#endregion
-
+     this.db.object('/courses').valueChanges()
+    .subscribe(item => {
+      this.courseComId = item;
+      console.log('itens: ', this.courseComId);
+    });
   }
 
   ngOnInit(): void {
@@ -41,9 +40,10 @@ export class AppComponent implements OnInit {
 
   addCourse(course: HTMLInputElement) {
     const obj: any = {
-      'idade': '15',
+      'id': Math.random(),
+      'idade': '69',
       'nome': course.value,
-      'telefone': 883312,
+      'telefone': 696969,
       'sections': [
         {
           title: 'Seção 1',
@@ -56,8 +56,17 @@ export class AppComponent implements OnInit {
       ]
     };
 
-    const add = this.db.list('/courses');
-    add.push(obj);
+    this.crud.push(obj);
     course.value = '';
+  }
+
+  update(course, newNome: HTMLInputElement) {
+  //  console.log(course.nome);
+   // course.nome = newNome.value;
+ //   console.log('Novo Objeto: ', course);
+  //  this.crud.update(course.id, course);
+//console.log(this.db.object('/courses/' + course.$key));
+
+
   }
 }
