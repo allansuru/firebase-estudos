@@ -57,7 +57,8 @@ courseComId: any;
     };
 
     this.crud.push(obj);
-    course.value = '';
+    //course.value = '';
+    coruse.value = ';'
   }
 
   update(course, newNome: HTMLInputElement) {
